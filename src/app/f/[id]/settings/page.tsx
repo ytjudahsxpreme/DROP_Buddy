@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { MasterCodeCard } from "@/components/MasterCodeCard";
 import { dataSource } from "@/lib/data/dataSource";
 import type {
   ColumnMapping,
@@ -100,6 +101,7 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-4 space-y-4">
+      <MasterCodeCard />
       <Card title="Access code">
         <label className="block text-sm font-medium text-slate-700 mb-1">
           Code shared with class advisors and officers
