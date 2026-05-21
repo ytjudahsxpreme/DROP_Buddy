@@ -64,17 +64,21 @@ export function StudentCard({ order }: { order: StudentOrder }) {
 function LineRow({ line }: { line: StudentOrderLine }) {
   const textAttrs = (line.attributes ?? []).filter((a) => a.type === "text");
   const boolAttrs = (line.attributes ?? []).filter((a) => a.type === "boolean");
+  const hasIdentifier = !!line.identifier;
+  const idDisplay = line.identifier
+    ? line.identifier
+        .split(/[,\s]+/)
+        .map((p) => p.trim())
+        .filter(Boolean)
+        .map((p) => `#${p.replace(/^#/, "")}`)
+        .join(", ")
+    : "";
 
   return (
     <li className="px-4 sm:px-5 py-2.5 text-sm">
       <div className="flex items-center gap-3">
         <span className="flex-1 min-w-0">
           <span className="font-semibold text-slate-900">{line.itemName}</span>
-          {line.identifier && (
-            <span className="ml-2 inline-flex items-center rounded-md bg-slate-900/90 text-white text-[11px] font-mono px-1.5 py-0.5 tabular-nums">
-              #{line.identifier.replace(/^#/, "")}
-            </span>
-          )}
           {textAttrs.map((a) => (
             <span
               key={a.label}
@@ -85,9 +89,18 @@ function LineRow({ line }: { line: StudentOrderLine }) {
             </span>
           ))}
         </span>
-        <span className="text-base font-semibold tabular-nums text-slate-900">
-          ×{line.quantity}
-        </span>
+        {hasIdentifier ? (
+          <span
+            className="inline-flex items-center rounded-lg bg-slate-900 text-white px-2.5 py-1 text-base font-bold font-mono tabular-nums"
+            title={line.quantity > 1 ? `${line.quantity} units` : undefined}
+          >
+            {idDisplay}
+          </span>
+        ) : (
+          <span className="text-base font-semibold tabular-nums text-slate-900">
+            ×{line.quantity}
+          </span>
+        )}
       </div>
       {boolAttrs.length > 0 && (
         <div className="mt-1.5 flex flex-wrap gap-1 pl-0.5">
