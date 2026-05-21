@@ -16,10 +16,18 @@ export default async function HomePage() {
     <div className="flex-1 flex flex-col">
       <header className="px-5 pt-8 pb-4 sm:pt-12">
         <div className="mx-auto max-w-3xl">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-            Fundraiser Hub
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">
+              DROP
+            </span>
+            <span className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-600">
+              Buddy
+            </span>
+          </div>
+          <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
+            Drop-Ready Order Portal
           </p>
-          <h1 className="mt-1 text-2xl sm:text-3xl font-bold tracking-tight">
+          <h1 className="mt-5 text-xl sm:text-2xl font-bold tracking-tight">
             Choose a fundraiser
           </h1>
           <p className="mt-2 text-sm text-slate-600 max-w-md">
@@ -45,8 +53,13 @@ export default async function HomePage() {
       </main>
       <footer className="px-5 py-6 border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-3xl flex items-center justify-between text-xs text-slate-500">
-          <span>Internal use only · School Fundraiser System</span>
-          <span className="font-mono">v0.2</span>
+          <span>
+            <span className="font-bold tracking-tight">DROP</span>
+            <span className="ml-1 font-medium">Buddy</span>
+            <span className="mx-2 text-slate-300">·</span>
+            <span>Internal use only</span>
+          </span>
+          <span className="font-mono">v0.3</span>
         </div>
       </footer>
     </div>

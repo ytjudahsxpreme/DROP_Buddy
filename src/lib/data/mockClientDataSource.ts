@@ -8,7 +8,7 @@ import type { Fundraiser } from "./types";
  * without a backend.
  */
 
-const LS_OVERRIDES_KEY = "fundraiser-app:fundraiser-overrides:v2";
+const LS_OVERRIDES_KEY = "drop-buddy:fundraiser-overrides:v2";
 
 interface StoredOverride {
   accessCode?: string;

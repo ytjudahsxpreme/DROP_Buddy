@@ -29,7 +29,7 @@ export const useAppState = create<AppState>()(
       isUnlocked: (id) => get().unlockedFundraisers.includes(id),
     }),
     {
-      name: "fundraiser-app:unlocked",
+      name: "drop-buddy:unlocked",
     },
   ),
 );

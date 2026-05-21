@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fundraiser Hub",
-  description: "Fast student lookup and live dashboards for school fundraiser distribution.",
+  title: "DROP Buddy",
+  description:
+    "DROP Buddy — Drop-Ready Order Portal. Fast student lookup for fundraiser distribution day.",
 };
 
 export const viewport: Viewport = {

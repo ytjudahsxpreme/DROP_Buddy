@@ -1,6 +1,13 @@
-# Fundraiser Hub
+# DROP Buddy
 
-Mobile-first internal web app that replaces paper student-lookup lists during school fundraiser distribution.
+**Drop-Ready Order Portal** — a mobile-first internal web app that replaces paper student-lookup lists during school fundraiser distribution.
+
+DROP stands for:
+
+- **D**rop-ready
+- **R**oster of
+- **O**rders
+- **P**resented
 
 The whole platform exists to answer one question fast:
 
