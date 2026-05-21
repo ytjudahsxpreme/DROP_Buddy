@@ -46,6 +46,32 @@ export const clientDataSource: DataSource = {
   },
 };
 
+export interface DeliveriesResponse {
+  date: string;
+  delivered: Record<string, string>; // studentKey → ISO timestamp
+}
+
+export async function fetchDeliveries(
+  fundraiserId: string,
+  date: string,
+): Promise<DeliveriesResponse> {
+  return jsonFetch<DeliveriesResponse>(
+    `/api/deliveries/${encodeURIComponent(fundraiserId)}?date=${encodeURIComponent(date)}`,
+  );
+}
+
+export async function setDeliveryStatus(
+  fundraiserId: string,
+  date: string,
+  studentKey: string,
+  delivered: boolean,
+): Promise<void> {
+  await jsonFetch(`/api/deliveries/${encodeURIComponent(fundraiserId)}`, {
+    method: "POST",
+    body: JSON.stringify({ date, studentKey, delivered }),
+  });
+}
+
 export async function verifyAccessCode(fundraiserId: string, code: string): Promise<boolean> {
   const res = await fetch("/api/verify-access", {
     method: "POST",

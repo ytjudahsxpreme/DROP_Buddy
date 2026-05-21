@@ -1,14 +1,40 @@
 import type { StudentOrder, StudentOrderLine } from "@/lib/data/types";
+import { cn } from "@/lib/utils/cn";
 
-export function StudentCard({ order }: { order: StudentOrder }) {
+interface Props {
+  order: StudentOrder;
+  /** undefined = no delivery tracking for this card (e.g. no date selected). */
+  delivered?: boolean;
+  /** Called when the user taps the delivered toggle. */
+  onToggleDelivered?: () => void;
+}
+
+export function StudentCard({ order, delivered, onToggleDelivered }: Props) {
   const isStaff = order.building === "STAFF";
+  const trackingEnabled = delivered !== undefined && onToggleDelivered !== undefined;
+
   return (
-    <article className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+    <article
+      className={cn(
+        "rounded-2xl bg-white border shadow-sm overflow-hidden transition-colors",
+        delivered ? "border-emerald-300 bg-emerald-50/40" : "border-slate-200",
+      )}
+    >
       <header className="flex items-start justify-between gap-3 p-4 sm:p-5">
         <div className="min-w-0">
-          <h3 className="text-lg sm:text-xl font-semibold leading-tight">
-            {order.firstName} {order.lastName}
-          </h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="text-lg sm:text-xl font-semibold leading-tight">
+              {order.firstName} {order.lastName}
+            </h3>
+            {delivered && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5">
+                <svg viewBox="0 0 24 24" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                Delivered
+              </span>
+            )}
+          </div>
           <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
             {isStaff ? (
               <span className="inline-flex items-center rounded-md bg-violet-100 text-violet-800 text-[11px] font-semibold uppercase tracking-wide px-1.5 py-0.5">
@@ -56,6 +82,35 @@ export function StudentCard({ order }: { order: StudentOrder }) {
             <span>{order.notes}</span>
           </p>
         </div>
+      )}
+
+      {trackingEnabled && (
+        <button
+          type="button"
+          onClick={onToggleDelivered}
+          className={cn(
+            "w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold border-t transition-colors",
+            delivered
+              ? "bg-emerald-100 text-emerald-900 border-emerald-200 hover:bg-emerald-200/70 active:bg-emerald-200"
+              : "bg-slate-900 text-white border-slate-900 hover:bg-slate-800 active:bg-slate-950",
+          )}
+        >
+          {delivered ? (
+            <>
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span>Delivered — tap to undo</span>
+            </>
+          ) : (
+            <>
+              <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+              </svg>
+              <span>Mark delivered</span>
+            </>
+          )}
+        </button>
       )}
     </article>
   );

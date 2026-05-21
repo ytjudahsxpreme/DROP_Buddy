@@ -132,6 +132,61 @@ export async function verifyAccessCode(
 }
 
 /**
+ * Returns the fulfillment map for a (fundraiser, date) pair:
+ *   { studentKey: ISO-timestamp-when-marked }
+ */
+export async function getDeliveries(
+  fundraiserId: string,
+  date: string,
+): Promise<Record<string, string>> {
+  const db = getDb();
+  const snap = await db
+    .collection("fundraisers")
+    .doc(fundraiserId)
+    .collection("deliveryDays")
+    .doc(date)
+    .get();
+  const data = snap.data();
+  const delivered = data?.delivered;
+  if (!delivered || typeof delivered !== "object") return {};
+  // Firestore returns nested timestamps as Timestamps; coerce to ISO string.
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(delivered)) {
+    if (typeof v === "string") out[k] = v;
+    else if (v && typeof (v as { toDate?: () => Date }).toDate === "function") {
+      out[k] = (v as { toDate: () => Date }).toDate().toISOString();
+    }
+  }
+  return out;
+}
+
+/**
+ * Mark or unmark a student as delivered for a given fundraiser + date.
+ * Uses a deep field path so concurrent staff updates don't clobber each other.
+ */
+export async function setDelivered(
+  fundraiserId: string,
+  date: string,
+  studentKey: string,
+  delivered: boolean,
+): Promise<void> {
+  const db = getDb();
+  const ref = db
+    .collection("fundraisers")
+    .doc(fundraiserId)
+    .collection("deliveryDays")
+    .doc(date);
+  const FieldValue = (await import("firebase-admin/firestore")).FieldValue;
+  await ref.set(
+    {
+      delivered: { [studentKey]: delivered ? new Date().toISOString() : FieldValue.delete() },
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true },
+  );
+}
+
+/**
  * Bulk upsert (used by the seed script).
  */
 export async function seedFundraisers(fundraisers: Fundraiser[]): Promise<void> {
